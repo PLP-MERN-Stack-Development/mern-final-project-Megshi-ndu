@@ -1,0 +1,39 @@
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to Production
+        # This is a placeholder for your deployment script.
+        # You would replace this with commands for your hosting provider (e.g., Render, Vercel, Heroku).
+        # Example for a service like Render which might use a deploy hook:
+        run: |
+          echo "Starting deployment..."
+          # The following curl command is an example of triggering a deploy hook.
+          # You would get this URL from your hosting provider's settings.
+          # curl -X POST ${{ secrets.DEPLOY_HOOK_URL }}
+          echo "Deployment triggered!"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        run: vercel --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
